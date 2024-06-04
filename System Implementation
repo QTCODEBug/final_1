@@ -1,0 +1,34 @@
+System Implementation
+
+Hardware Architecture
+Description of the functions of the peripherals on the FRDM-KL46Z board used to implement the system:
+
+| Component         | Function                                                   |
+|-------------------|------------------------------------------------------------|
+| MAG3110 Sensor    | Reads magnetic field data to determine the direction.      |
+| SW1 Push Button   | Toggles between the system's active and inactive states.   |
+| SW2 Push Button   | Resets the system state.                                   |
+| Green LED         | Blinks at 1Hz when the system is active.                   |
+| Red LED           | Blinks at 2Hz when the system is inactive.                 |
+| LCD Screen        | Displays the compass direction.                            |
+| Timer             | Determines the blink intervals of the LEDs.                |
+ Implementation Steps:
+
+1. Configure MAG3110 Sensor:
+   - Set up I2C communication with the MAG3110 sensor.
+   - Read magnetic field data and calculate the direction.
+
+2. Configure LEDs and Push Buttons:
+   - Set initial states for the green and red LEDs.
+   - Configure interrupts for SW1 and SW2 push buttons.
+
+3. Display on LCD Screen:
+   - Set up communication with the LCD screen.
+   - Update the display with the direction based on sensor data.
+
+4. Toggle Active and Inactive States:
+   - Use interrupts to switch between states when SW1 is pressed.
+   - Reset the system when SW2 is pressed.
+
+5. Use Timer:
+   - Set up a timer to control the blink frequencies of the green and red LEDs.
