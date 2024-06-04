@@ -1,0 +1,27 @@
+ 1. System Description
+
+ Inputs:
+- MAG3110 Magnetometer Sensor: Used to detect direction.
+- SW1 Push Button: Toggles between the system's active and inactive states.
+  - When the system is inactive, press SW1 to switch to the active state.
+  - When the system is active, press SW1 to switch to the inactive state.
+- SW2 Push Button: Resets the system to its normal state.
+
+Outputs:
+- Green LED:
+  - Blinks at 1Hz when the system is active.
+  - Turns off when the system is inactive.
+- Red LED:
+  - Blinks at 2Hz when the system is inactive.
+  - Turns off when the system is active.
+- LCD Screen: Displays the compass direction.
+ Counter:
+- Uses a timer to determine the blink intervals of the LEDs.
+
+2. Technical Specification
+
+- The MAG3110 magnetometer sensor will be configured to read magnetic field data and calculate the direction.
+- The system will have the capability to switch between active and inactive states via the SW1 push button.
+- When switching states, the system will either continue or stop monitoring the sensor status and display the results on the LCD screen.
+- The SW2 push button will reset the system to its initial state.
+- The green and red LEDs will reflect the system's operational status based on the set blink frequencies.
