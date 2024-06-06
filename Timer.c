@@ -1,26 +1,25 @@
-#include "fsl_pit.h"
+#include "Timer.h"
+#include "MKL46Z4.h"
+#include "GPIO.h"
+#include "global.h"
 
-// Hàm khởi tạo timer
-void Init_Timer(void) {
-    pit_config_t pitConfig;
-    
-    PIT_GetDefaultConfig(&pitConfig);
-    PIT_Init(PIT, &pitConfig);
-    
-    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, USEC_TO_COUNT(500000U, CLOCK_GetFreq(kCLOCK_BusClk)));
-    PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
-    
-    NVIC_EnableIRQ(PIT0_IRQn);
-    PIT_StartTimer(PIT, kPIT_Chnl_0);
+void Timer_Init(void) {
+    SIM->SCGC6 |= SIM_SCGC6_PIT_MASK; // Enable clock for PIT
+    PIT->MCR = 0x00; // Enable PIT module
+
+    PIT->CHANNEL[0].LDVAL = 20971520; // Load value for 1 Hz blink rate
+    PIT->CHANNEL[0].TCTRL |= PIT_TCTRL_TIE_MASK; // Enable timer interrupts
+    PIT->CHANNEL[0].TCTRL |= PIT_TCTRL_TEN_MASK; // Start timer
+
+    NVIC_EnableIRQ(PIT_IRQn); // Enable PIT interrupt in NVIC
 }
 
-// ISR cho timer
-void PIT0_IRQHandler(void) {
-    PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
+void PIT_IRQHandler(void) {
+    PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK; // Clear interrupt flag
     
     if (isSystemActive) {
-        GPIO_TogglePinsOutput(GPIOB, 1U << LED_GREEN_PIN);
+        GPIOB->PTOR |= (1 << 5); // Toggle green LED
     } else {
-        GPIO_TogglePinsOutput(GPIOE, 1U << LED_RED_PIN);
+        GPIOE->PTOR |= (1 << 29); // Toggle red LED
     }
 }
